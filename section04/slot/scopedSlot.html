@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>Document</title>
+    <style>
+      .parent {
+        width: 800px;
+        margin: 0 auto;
+        border: 1px red solid;
+      }
+      .child {
+        width: 80%;
+        margin: 0 auto;
+        border: 1px blue solid;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="parent">
+      <my-component class="child">
+        <template v-slot:default="person">
+          {{person}}
+          <br />
+          {{person.member.name}}
+        </template>
+      </my-component>
+    </div>
+
+    <script>
+      let myComponent = {
+        template: `
+        <div>
+          <slot :member="member">change</slot>
+        </div>
+        `,
+        data() {
+          return {
+            member: {
+              name: "abc",
+              height: 170,
+              hobby: "sports",
+            },
+          };
+        },
+      };
+
+      let app = new Vue({
+        el: "#app",
+        data() {
+          return {};
+        },
+        components: {
+          myComponent,
+        },
+      });
+    </script>
+  </body>
+</html>

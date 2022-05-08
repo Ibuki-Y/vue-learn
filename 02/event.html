@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <p>現在{{number}}回クリックされています</p>
+      <button @click="countUp(2)">up</button>
+
+      <!-- .stop: event.stopPropagation() -->
+      <p @mousemove="changeMousePosition(1000000, $event)">
+        マウスをのせてください<span @mousemove.stop>反応拒否</span>
+      </p>
+      <p>X: {{x}}, Y: {{y}}</p>
+
+      <!-- .prevent: event.preventDefault -->
+      <a @[event].prevent href="https://google.com">Google</a>
+
+      <!-- .enter: enterを押したときkeyup eventが発火 -->
+      <input type="text" @keyup.enter.space="myAlert" />
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          number: 0,
+          x: 0,
+          y: 0,
+          event: "click",
+        },
+        methods: {
+          countUp: function (times) {
+            this.number += 1 * times;
+          },
+          // event取得
+          changeMousePosition: function (n, event) {
+            // console.log(event);
+            this.x = event.clientX * n;
+            this.y = event.clientY * n;
+          },
+          myAlert: function () {
+            alert("enter");
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

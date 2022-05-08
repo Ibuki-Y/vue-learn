@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app-144">
+      <div v-font24>Hello!</div>
+    </div>
+
+    <br />
+
+    <div id="app-145">
+      <div v-font24>{{ message | toupper }}</div>
+    </div>
+
+    <script>
+      // グローバルに独自のカスタムディレクティブを追加
+      Vue.directive("font24", {
+        inserted: function (el) {
+          el.style.fontSize = "24pt";
+        },
+      });
+      var app144 = new Vue({
+        el: "#app-144",
+      });
+
+      Vue.filter("toupper", function (value) {
+        // 大文字
+        return value.toUpperCase();
+      });
+      var app145 = new Vue({
+        el: "#app-145",
+        data: { message: "Hello!" },
+      });
+
+      // グローバルミックスイン
+      Vue.mixin({
+        created: function () {
+          console.log(this);
+        },
+      });
+
+      // version
+      console.log(Vue.version); // 2.6.1
+    </script>
+  </body>
+</html>

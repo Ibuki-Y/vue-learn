@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- v-once: 一度だけ描画 -->
+      <p v-once>{{message}}</p>
+
+      <!-- v-html: dataにタグがあるとき XSS危険!! -->
+      <p v-html="h1Tag"></p>
+
+      <button @click="onReverse">reverse</button>
+
+      <!-- {}内でもjavascript可 -->
+      <p>{{number+3}}</p>
+      <p>{{sayHi()}}</p>
+
+      <!-- 三項演算子 -->
+      <p>{{ok ? 'YES': 'NO'}}</p>
+
+      <p v-text="message"></p>
+
+      <!-- v-bind -->
+      <a :href="url" :id="number">google</a>
+      <a v-bind="{href: url, id: number}">google</a>
+      <a v-bind="obj">google</a>
+      <a :[attribute]="url">google</a>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          message: "Hello World!",
+          number: 3,
+          ok: true,
+          h1Tag: "<h1>h1 Tag</h1>",
+          url: "https://google.com",
+          attribute: "href",
+          obj: {
+            // thisは使えない
+            href: "https://google.com",
+            id: 1,
+          },
+        },
+        methods: {
+          onReverse: function () {
+            this.message = this.message.split("").reverse().join("");
+          },
+          sayHi: function () {
+            this.message = "Hello Vue!";
+            return this.message;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

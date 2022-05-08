@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app">
+      {{totalPriceMethods()}} {{totalPriceMethods()}}
+
+      <!-- ()はつけない -->
+      {{totalPriceComputed}} {{totalPriceComputed}}
+    </div>
+
+    <script>
+      let app = new Vue({
+        el: "#app",
+
+        data() {
+          // 自動でget, setが付与される
+          return {
+            price: 100,
+            number: 3,
+            reactiveTest: {
+              name: "test",
+              // Vue.set(app.reactiveTest, '', '');
+            },
+            books: [
+              {
+                id: 1,
+                title: "abc",
+                author: "name01",
+                url: "https://google.com",
+              },
+              {
+                id: 2,
+                title: "def",
+                author: "name02",
+                url: "https://google.com",
+              },
+              {
+                id: 3,
+                title: "ghr",
+                author: "name03",
+                url: "https://google.com",
+              },
+            ],
+          };
+        },
+
+        methods: {
+          // cashなし
+          totalPriceMethods() {
+            console.log("methods excuted");
+            return this.price * this.number;
+          },
+        },
+
+        computed: {
+          // cashあり (返り値が変化すると動く)
+          // 必ずreturnとthis.(data)を含める
+          // totalPriceComputed() {
+          //   console.log("computed excuted");
+          //   return this.price * this.number;
+          // },
+
+          // 省略 (vm)
+          // thisだとwindowオブジェクトを見るため，undefinedになる => app
+          totalPriceComputed: (app) => app.number * app.price,
+        },
+
+        watch: {
+          books: {
+            handler() {
+              console.log("changed");
+            },
+            deep: true,
+          },
+        },
+      });
+
+      console.log(this); // windowオブジェクト
+
+      const obj = {
+        test: function () {
+          consol.log(this); // オブジェクト内のそのオブジェクト
+        },
+      };
+
+      const objArrow = {
+        test: () => {
+          consol.log(this); // windowオブジェクト
+        },
+      };
+    </script>
+  </body>
+</html>

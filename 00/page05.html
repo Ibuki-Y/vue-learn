@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app-201">{{ message }}</div>
+
+    <br />
+
+    <div id="app-202">
+      <my-element-202 value="hello component"></my-element-202>
+    </div>
+
+    <br />
+
+    <div id="app-203">
+      <div id="el-203"></div>
+    </div>
+
+    <br />
+
+    <div id="app-204">
+      <div><input v-model="message" /></div>
+      <div>Message: {{ upperMessage }}</div>
+    </div>
+
+    <br />
+
+    <div id="app-205">
+      <button @click="toUpper">Up</button>
+      <button @click="toLower">Low</button>
+      <div>{{message}}</div>
+    </div>
+
+    <br />
+
+    <div id="app-206">
+      <form>
+        <input type="text" name="text1" :value="message" />
+        <input type="button" @click="change" value="Change" />
+      </form>
+      <div>変更前: {{ oldmsg }}</div>
+      <div>変更後: {{ newmsg }}</div>
+    </div>
+
+    <br />
+
+    <script>
+      var app201 = new Vue({
+        el: "#app-201",
+        data: { message: "Data" },
+      });
+
+      Vue.component("my-element-202", {
+        // コンポーネント内部で使用する属性を定義
+        props: ["value"],
+        template: "<div>{{ value }}</div>",
+      });
+      var app202 = new Vue({
+        el: "#app-202",
+      });
+
+      var MyElement203 = Vue.extend({
+        props: ["message"],
+        template: "<div>{{ message }}</div>",
+      });
+      var vm = new MyElement203({
+        // インスタンス作成中の props データを指定
+        propsData: { message: "myEvent203" },
+      }).$mount("#el-203");
+      var app203 = new Vue({
+        el: "#app-203",
+      });
+
+      var app204 = new Vue({
+        el: "#app-204",
+        data: {
+          message: "Hello",
+        },
+        // 算出プロパティを生成
+        computed: {
+          upperMessage: function () {
+            return this.message.toUpperCase();
+          },
+        },
+      });
+
+      var app205 = new Vue({
+        el: "#app-205",
+        data: {
+          message: "Hello app205",
+        },
+        methods: {
+          toUpper: function () {
+            this.message = this.message.toUpperCase();
+          },
+          toLower: function () {
+            this.message = this.message.toLowerCase();
+          },
+        },
+      });
+
+      var app206 = new Vue({
+        el: "#app-206",
+        data: {
+          message: "new",
+          newmsg: "new",
+          oldmsg: "old",
+        },
+        // データの変動を監視する．データ変動時にコールバック関数が呼ばれ，引数には変更前の値と，変更後の値が渡される．
+        watch: {
+          message: function (newVal, oldVal) {
+            this.newmsg = newVal;
+            this.oldmsg = oldVal;
+          },
+        },
+        methods: {
+          change: function (e) {
+            this.message = e.target.form.text1.value;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

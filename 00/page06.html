@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app-210" v-text="message"></div>
+
+    <br />
+
+    <div id="app-211">
+      <my-element-211></my-element-211>
+    </div>
+
+    <br />
+
+    <div id="app-212">
+      <!-- level属性で指定した値によって h1～h6 を適用する -->
+      <my-heading-212 :level="1">Hello!</my-heading-212>
+    </div>
+
+    <br />
+
+    <div id="app-213">
+      <app213-heading :level="1">Hello!</app213-heading>
+    </div>
+
+    <br />
+
+    <script>
+      var app210 = new Vue({
+        // Vueを適用する要素を指定
+        el: "#app-210",
+        data: { message: "Hello!" },
+      });
+
+      Vue.component("my-element-211", {
+        // コンポーネントのテンプレート
+        template: "<span>Hello template</span>",
+      });
+      var app211 = new Vue({
+        el: "#app-211",
+      });
+
+      Vue.component("my-heading-212", {
+        props: ["level"],
+        // templateで表現できない複雑なテンプレートを定義
+        render: function (createElement) {
+          return createElement("h" + this.level, this.$slots.default);
+        },
+      });
+      var app212 = new Vue({
+        el: "#app-212",
+      });
+
+      Vue.component("app213-heading", {
+        render: function (createElement) {
+          throw new Error("err213");
+        },
+        // render 関数内でエラーが発生した際にエラー詳細情報などを表示
+        renderError: function (ce, err) {
+          return ce("pre", { style: { color: "red" } }, err.stack);
+        },
+        props: ["level"],
+      });
+      var app213 = new Vue({
+        el: "#app-213",
+      });
+
+      // ライフサイクルフック
+    </script>
+  </body>
+</html>

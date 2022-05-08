@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <style>
+      .flip-list-move {
+        transition: transform 0.5s;
+      }
+    </style>
+
+    <div id="app">
+      <button @click="shuffle">shuffle</button>
+      <transition-group name="flip-list" tag="ul">
+        <li v-for="pref in prefs" :key="pref.name">{{pref.name}}</li>
+      </transition-group>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          prefs: [
+            { name: "A" },
+            { name: "B" },
+            { name: "C" },
+            { name: "D" },
+            { name: "E" },
+            { name: "F" },
+          ],
+        },
+        methods: {
+          shuffle: function () {
+            this.prefs = _.shuffle(this.prefs);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

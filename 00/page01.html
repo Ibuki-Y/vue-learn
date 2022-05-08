@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <title>test</title>
+  </head>
+
+  <style>
+    #app-2 .error {
+      color: red;
+    }
+  </style>
+
+  <body>
+    <div id="app-2">
+      <input type="text" v-model="message" />
+      <div class="error" v-if="error.require">必須項目です。</div>
+      <div class="error" v-if="error.tooLong">長すぎます。</div>
+    </div>
+  </body>
+
+  <script>
+    var app2 = new Vue({
+      el: "#app-2",
+      watch: {
+        message: function (newVal, oldVal) {
+          this.error.require = newVal.length < 1 ? true : false;
+          this.error.tooLong = newVal.length > 5 ? true : false;
+        },
+      },
+      data: {
+        message: "Hello",
+        error: {
+          require: false,
+          tooLong: false,
+        },
+      },
+    });
+  </script>
+</html>

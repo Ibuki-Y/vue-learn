@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>Document</title>
+    <style>
+      .active {
+        color: red;
+      }
+
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- リアルDOM -->
+    <a id="google_link">google</a>
+
+    <!-- 仮想DOM -->
+    <div id="app">
+      {{message}}
+      <br />
+      <a :href="google">google</a>
+      <p>{{book.title}}</p>
+      <input v-bind="formInput" />
+      <div :class="{active:isActive}">Class Test</div>
+
+      <!-- display: none;がつく -->
+      <div v-show="isActive">v-show</div>
+
+      <div v-if="isActive">v-if</div>
+
+      <ul>
+        <li v-for="member in members">{{member}}</li>
+      </ul>
+
+      <!-- v-for index表示 -->
+      <ul>
+        <li v-for="(member, index) in members">{{index}}: {{member}}</li>
+      </ul>
+
+      <!-- v-for object -->
+      <ul>
+        <li v-for="value in obj">{{value}}</li>
+      </ul>
+
+      <!-- v-for object key -->
+      <ul>
+        <li v-for="(value, key) in obj">{{value}} = {{key}}</li>
+      </ul>
+
+      <!-- v-for object key index -->
+      <ul>
+        <li v-for="(value, key, index) in obj">{{index}}: {{value}} = {{key}}</li>
+      </ul>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>TITLE</th>
+            <th>AUTHOR</th>
+            <th>URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- keyにidを指定する! (×index) -->
+          <tr v-for="book in books" :key="book.id">
+            <td>{{book.id}}</td>
+            <td>{{book.title}}</td>
+            <td>{{book.author}}</td>
+            <td>{{book.url}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- v-textはtagも表示する (v-htmlはXSS..) -->
+      <div v-text="text"></div>
+      <div v-html="text"></div>
+
+      <button @click="btnClicked">Button</button>
+      <button @click="btnClickedArgs(1)">Button</button>
+      <button @click="btnClickedArgsEvent(1,$event)">Button</button>
+    </div>
+
+    <br />
+
+    <div id="app2" v-cloak>
+      <div v-cloak>{{test1}}</div>
+      <div>{{test2}}</div>
+    </div>
+
+    <script>
+      let app = new Vue({
+        el: "#app", //仮想DOM
+        data() {
+          // ×ケバブケース
+          return {
+            message: "Hello Vue!",
+            // idに依存しない
+            google: "https://google.com",
+            book: {
+              title: "book name",
+              content: "book content",
+            },
+            books: [
+              {
+                id: 1,
+                title: "abc",
+                author: "name01",
+                url: "https://google.com",
+              },
+              {
+                id: 2,
+                title: "def",
+                author: "name02",
+                url: "https://google.com",
+              },
+              {
+                id: 3,
+                title: "ghr",
+                author: "name03",
+                url: "https://google.com",
+              },
+            ],
+            formInput: {
+              name: "your_name",
+              placeholder: "enter your name",
+            },
+            isActive: true,
+            members: ["a", "b", "c"],
+            obj: {
+              title: "title",
+              content: "content",
+              author: "author",
+            },
+            text: "aaa <br /> bbb",
+          };
+        },
+
+        methods: {
+          btnClicked(e) {
+            console.log(e);
+          },
+          btnClickedArgs(int) {
+            console.log(int);
+          },
+          btnClickedArgsEvent(int, $event) {
+            console.log(int, $event);
+          },
+        },
+      });
+
+      setTimeout(() => {
+        new Vue({
+          el: "#app2",
+          data() {
+            return {
+              test1: "v-cloakあり",
+              test2: "v-cloakなし",
+            };
+          },
+        });
+      }, 2000);
+
+      // 直接DOM操作 idが変われば変更が必要
+      const googleLink = document.getElementById("google_link");
+      googleLink.href = "https://google.com";
+
+      const html = document.querySelector("html");
+      // console.dir(html);
+    </script>
+  </body>
+</html>

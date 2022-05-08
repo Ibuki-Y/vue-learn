@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="component01">
+      <button-counter prop01="hello!"></button-counter>
+      <button-counter prop01="props"></button-counter>
+      <!-- v-bind × props -->
+      <!-- <button-counter :prop1=""></button-counter> -->
+    </div>
+
+    <script>
+      // component
+      Vue.component("button-counter", {
+        // props
+        props: ["prop01"],
+        data: function () {
+          return {
+            count: 0,
+          };
+        },
+        // countは非同期
+        template: '<button @click="count++">{{prop01}} {{ count }} times!</button>',
+      });
+
+      new Vue({
+        el: "#component01",
+      });
+    </script>
+  </body>
+</html>

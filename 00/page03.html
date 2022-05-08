@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+
+    <div id="app-122">
+      <button onclick="location.reload()">再表示</button>
+      <div>Message: <span v-cloak>{{ message }}</span></div>
+      <div>Message: <span>{{ message }}</span></div>
+      <div>Message: <span v-once>{{ message }}</span></div>
+    </div>
+
+    <div id="app-140">
+      <my-element-140></my-element-140>
+    </div>
+
+    <div id="app-141">
+      <my-component-141></my-component-141>
+    </div>
+
+    <div id="app-142">
+      <div>{{ message }}</div>
+    </div>
+
+    <br />
+
+    <div id="app-143">
+      <input type="button" @click="addBlue" value="Add" />
+      <input type="button" @click="deleteBlue" value="Delete" />
+      <ul>
+        <li v-for="(value, key) in colorList">{{ key }} = {{ value }}</li>
+      </ul>
+    </div>
+
+    <script>
+      window.setTimeout(function () {
+        var app122 = new Vue({
+          el: "#app-122",
+          data: { message: "Hello!" },
+        });
+      }, 1000);
+
+      Vue.component("my-element-140", {
+        template: "<strong>Hello</strong>",
+      });
+      var app140 = new Vue({
+        el: "#app-140",
+      });
+
+      // コンポーネントのサブクラスを生成
+      var MyComponent141 = Vue.extend({
+        template: "<strong>Hello!</strong>",
+      });
+      Vue.component("my-component-141", MyComponent141);
+      var app141 = new Vue({
+        el: "#app-141",
+      });
+
+      var app142 = new Vue({
+        el: "#app-142",
+        data: {
+          message: "app142: Hello",
+          msg1: "",
+          msg2: "",
+        },
+      });
+      app142.message = "Bye!";
+      console.log(app142.$el.textContent);
+      // 一連のDOM更新サイクル完了後に実行
+      Vue.nextTick(function () {
+        console.log(app142.$el.textContent);
+      });
+
+      var app143 = new Vue({
+        el: "#app-143",
+        data: {
+          colorList: {
+            red: "#f00",
+            green: "#0f0",
+          },
+        },
+        methods: {
+          addBlue: function () {
+            // オブジェクトのプロパティを設定し，必要に応じてViewの更新を行う
+            Vue.set(this.colorList, "blue", "#00f");
+          },
+          deleteBlue: function () {
+            Vue.delete(this.colorList, "blue");
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

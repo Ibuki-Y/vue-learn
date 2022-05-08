@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app-101">
+      <div v-text="message"></div>
+      <!-- この行と -->
+      <div>{{ message }}</div>
+      <!-- この行は、同じ意味を持ちます -->
+
+      <!-- XSS的にあまり良くない -->
+      <div v-html="msg"></div>
+    </div>
+
+    <div id="app-103">
+      <input type="checkbox" @click="change" checked />
+      <span v-show="seen">Hello!</span>
+      <input type="checkbox" @click="onChange" checked />
+      <span v-if="seen2">World!</span>
+      <span v-else>Bye!</span>
+    </div>
+
+    <div id="app-106">
+      <input type="radio" name="app106-type" onclick="app106.type='A'" checked />
+      <input type="radio" name="app106-type" onclick="app106.type='B'" />
+      <input type="radio" name="app106-type" onclick="app106.type='C'" />
+      <span v-if="type=='A'">Good morning.</span>
+      <span v-else-if="type=='B'">Hello!</span>
+      <span v-else>Bye!</span>
+    </div>
+
+    <div id="app-107">
+      <ul>
+        <li v-for="color in colorList">{{color}}</li>
+      </ul>
+    </div>
+
+    <div id="app-108">
+      <button v-on:click="hello">Hello</button>
+      <button @click.once="hello">Hello</button>
+    </div>
+
+    <div id="app-109">
+      <input type="button" v-bind:value="message" />
+      <input type="button" :value="message" />
+    </div>
+
+    <div id="app-120">
+      <input v-model.trim="message" />
+      <div>Message: {{ message }}</div>
+    </div>
+
+    <script>
+      var app101 = new Vue({
+        el: "#app-101",
+        data: { message: "Hello!", msg: "<b>Hello!</b>" },
+      });
+
+      var app103 = new Vue({
+        el: "#app-103",
+        data: {
+          seen: true,
+          seen2: true,
+        },
+        methods: {
+          change: function (e) {
+            this.seen = e.target.checked;
+          },
+          onChange: function (e) {
+            this.seen2 = e.target.checked;
+          },
+        },
+      });
+
+      var app106 = new Vue({
+        el: "#app-106",
+        data: { type: "A" },
+      });
+
+      var app107 = new Vue({
+        el: "#app-107",
+        data: {
+          colorList: ["red", "green", "blue"],
+        },
+      });
+
+      var app108 = new Vue({
+        el: "#app-108",
+        methods: {
+          hello: function () {
+            alert("Hello!");
+          },
+        },
+      });
+
+      var app109 = new Vue({
+        el: "#app-109",
+        data: { message: "My Button" },
+      });
+
+      var app120 = new Vue({
+        el: "#app-120",
+        data: { message: "Hello!" },
+      });
+    </script>
+  </body>
+</html>

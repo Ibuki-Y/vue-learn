@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="vue.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <p>{{counter}}</p>
+      <button @click="counter+=1">+ 1</button>
+      <!-- computedは()をつけない -->
+      <p>{{lessThanThreeComputed}}</p>
+      <!-- methodsは()をつける -->
+      <!-- <p>{{lessThanThreeMethod()}}</p> -->
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          counter: 0,
+        },
+        // 依存関係をキャッシュする
+        computed: {
+          lessThanThreeComputed: function () {
+            console.log("computed");
+            return this.counter >= 3 ? "3以上" : "3未満";
+          },
+        },
+        // methodsを{{}}の中で使わない!
+        // methods: {
+        //   lessThanThreeMethod: function () {
+        //     return this.counter >= 3 ? "3以上" : "3未満";
+        //   },
+        // },
+
+        // 非同期 + 監視(なるべくcomputedを使う)
+        watch: {
+          counter: function () {
+            var vm = this;
+            setTimeout(function () {
+              vm.counter = 0;
+            }, 3000);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

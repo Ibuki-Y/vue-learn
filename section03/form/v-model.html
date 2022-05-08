@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+      .error {
+        color: red;
+      }
+    </style>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app" v-cloak>
+      <!-- errorsに要素があるとき表示 -->
+      <div v-if="errors.length">
+        <ul>
+          <li class="error" v-for="error in errors">{{ error }}</li>
+        </ul>
+      </div>
+
+      <!-- @submit: 送信時にmethodsを呼び出す -->
+      <form @submit.prevent="validate">
+        Name:
+        <!-- .trim: 空白を削除 -->
+        <!-- computedで監視している値 -->
+        <input type="text" v-model.trim="yourName" required />
+        <br />
+        <p :class="{error: hasError.yourName}">{{contact.yourName.length}} / 20</p>
+        <p v-show="hasError.yourName" class="error">Within 20</p>
+
+        Tel:
+        <!-- .number: 型を変換 -->
+        <input type="tel" v-model.number="contact.tel" />
+        <br />
+
+        Email:
+        <!-- .lazy: 記入欄からカーソルが外れると値が渡る -->
+        <input type="email" v-model.lazy="contact.email" required />
+        <br />
+
+        Gender:
+        <div>
+          <input type="radio" value="male" id="male" v-model="contact.gender" />
+          <label for="male">male</label>
+        </div>
+        <div>
+          <input type="radio" value="female" id="female" v-model="contact.gender" />
+          <label for="female">female</label>
+        </div>
+        <div>
+          <input type="radio" value="other" id="other" v-model="contact.gender" />
+          <label for="other">other</label>
+        </div>
+        <br />
+
+        Age:
+        <select v-model="contact.age">
+          <!-- disabled: iPhone表示 -->
+          <option disabled value="">Choose Your Age</option>
+          <option>10's</option>
+          <option>20's</option>
+          <option>30's</option>
+          <option>40's~</option>
+        </select>
+        <br />
+
+        Message:
+        <textarea v-model="contact.message"></textarea>
+        <br />
+
+        Any Additional Comments:
+        <input type="checkbox" value="web" v-model="contact.attracts" />Web
+        <input type="checkbox" value="flyer" v-model="contact.attracts" />Flyer
+        <input type="checkbox" value="other" v-model="contact.attracts" />Other
+        <br />
+
+        Consent:
+        <input type="checkbox" v-model="contact.caution" required />
+        <br />
+
+        <input type="submit" value="send" />
+      </form>
+    </div>
+
+    <script>
+      let app = new Vue({
+        el: "#app",
+        data() {
+          return {
+            contact: {
+              yourName: "",
+              tel: "",
+              email: "",
+              gender: "",
+              age: "",
+              message: "",
+              attracts: [],
+              caution: false,
+            },
+            errors: [],
+            hasError: {
+              yourName: false,
+            },
+          };
+        },
+        methods: {
+          validate() {
+            this.errors = [];
+            if (!this.contact.yourName) {
+              this.errors.push("Name Error");
+            } else if (this.contact.yourName.length > 20) {
+              this.errors.push("Name Is Too Long");
+            }
+            if (!this.contact.gender) {
+              this.errors.push("Gender Check Error");
+            }
+            if (!this.contact.caution) {
+              this.errors.push("Caution Check Error");
+            }
+            // errorsに要素がないとき
+            if (!this.errors.length) {
+              console.log("Can Send");
+            }
+          },
+        },
+        computed: {
+          yourName: {
+            get() {
+              return this.contact.yourName;
+            },
+            set(value) {
+              // console.log(value);
+              if (value.length <= 20) {
+                this.hasError.yourName = false;
+              } else {
+                this.hasError.yourName = true;
+              }
+              return (this.contact.yourName = value);
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
